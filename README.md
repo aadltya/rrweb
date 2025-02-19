@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# User Session Tracking and Analysis - Implementation Report
 
-## Getting Started
+## Author: Aditya Swami
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This document outlines the implementation details of the user session tracking and analysis assignment. The goal was to record user sessions, replay them, and analyze them using an LLM for insights. The project was built using `rrweb` for session recording and playback, and an LLM model for analysis.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features Implemented
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Session Recording
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Integrated `rrweb` to capture user interactions such as clicks, input events, and navigation.
+- Recorded events are stored in memory (as S3 storage access was unavailable).
+- Users can start and stop session recording with designated UI buttons.
 
-## Learn More
+### 2. Session Playback
 
-To learn more about Next.js, take a look at the following resources:
+- Implemented a session player using `rrweb-player`.
+- After stopping the recording, users can replay their session in a structured manner.
+- Ensured a smooth replay experience with proper event timing.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. LLM-Powered Analysis
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Implemented an API endpoint to process session data.
+- Sent recorded session data to an LLM for behavioral insights.
+- Displayed AI-generated insights in the UI, formatted in Markdown for better readability.
 
-## Deploy on Vercel
+## Technical Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Frontend:** Next.js, TypeScript, TailwindCSS
+- **Session Recording & Playback:** rrweb, rrweb-player
+- **LLM Integration:** Fetched AI-generated insights from a cloud-based LLM model
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Challenges & Workarounds
+
+### 1. **LLM Response Formatting**
+
+- The LLM returned insights in Markdown format.
+- Used `react-markdown` with `remark-gfm` to properly render the insights in the UI.
+
+### 2. **Sandboxing Issues in Browser**
+
+- Initially faced script execution issues due to iframe sandboxing.
+- Resolved by ensuring proper permissions and embedding constraints.
+
+## Deployment
+
+- **GitHub Repository:** https://github.com/aadltya/rrweb
+- **Live Demo:** https://rrweb-rust.vercel.app/
+
+## Next Steps
+
+- Integrate S3 storage for session persistence.
+- Optimize session data processing to handle large user bases efficiently.
+- Enhance LLM model integration to provide more contextual insights.
+
+## Conclusion
+
+The project successfully records and replays user sessions while leveraging an LLM for behavioral insights. This implementation serves as a strong foundation for further improvements, particularly in cloud-based storage and scalability.
